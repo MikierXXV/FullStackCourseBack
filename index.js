@@ -1,9 +1,25 @@
 const express = require('express')
 const app = express()
 
-const cors = require('cors')
-const morgan = require('morgan')
+let notes = [
+  {
+      id: 1,
+      content: "HTML is easy",
+      important: true
+  },
+  {
+      id: 2,
+      content: "Browser can execute only JavaScript",
+      important: false
+  },
+  {
+      id: 3,
+      content: "GET and POST are the most important methods of HTTP protocol",
+      important: true
+  },
+]
 
+app.use(express.static('dist'))
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -13,31 +29,27 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-app.use(express.json())
-app.use(requestLogger)
-app.use(morgan('tiny'))
+const cors = require('cors')
 app.use(cors())
 
-let notes = [
-    {
-        id: 1,
-        content: "HTML is easy",
-        important: true
-    },
-    {
-        id: 2,
-        content: "Browser can execute only JavaScript",
-        important: false
-    },
-    {
-        id: 3,
-        content: "GET and POST are the most important methods of HTTP protocol",
-        important: true
-    },
-]
+const morgan = require('morgan')
+app.use(morgan('tiny'))
+
+const baseUrl = '/api/notes'
+
+
+app.use(express.json())
+app.use(requestLogger)
+
+
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
+}
+
+const getAll = () => {
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
 }
 
 app.get('/', (request, response) => {
