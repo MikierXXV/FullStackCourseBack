@@ -5,6 +5,16 @@ POST http://localhost:3001/api/notes/ HTTP/1.1
 content-type: application/json
 
 {
-    "content": "sample",
+    "content": "lol",
     "important": false
+}
+
+
+###
+PUT http://localhost:3001/api/notes/662d1212a01b78d4b31d0da0 HTTP/1.1
+content-type: application/json
+
+{
+    "content": "sample",
+    "important": true
 }
